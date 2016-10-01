@@ -38,8 +38,8 @@ sudoku problem answer = do
   return answer
 
 showField :: (Result, Maybe (Board Word8)) -> IO ()
-showField (_, Just answer) = forM_ [1..9] $ \r -> do
-  forM_ [1..9] $ \c -> putChar $ intToDigit $ fromEnum $ answer ! (r, c)
+showField (_, Just answer) = forM_ [1..9] $ \c -> do
+  forM_ [1..9] $ \r -> putChar $ intToDigit $ fromEnum $ answer ! (c, r)
   putChar '\n'
 showField _ = fail "Impossible"
 
