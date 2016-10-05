@@ -1,8 +1,8 @@
 import Prelude hiding ((||),(&&),not,and,or)
--- import qualified Data.ByteString.Lazy as BL (writeFile, putStr)
--- import qualified Data.ByteString.Builder as BL (toLazyByteString)
+import qualified Data.ByteString.Lazy as BL (writeFile)
 import Data.Char
 import Data.Array
+import Data.Functor.Identity
 import Data.Word
 import Control.Monad
 import Control.Monad.State
@@ -60,6 +60,7 @@ main = do
   forM_ problem1 putStrLn
   let p = array fieldRange $ zip (range ((1,1),(9,9))) (concat problem1)
   let s = replicateM 81 exists >>= sudoku p . listArray fieldRange
---  BL.putStr $ dimacsSAT s
-  ans <- cryptominisat `solveWith` s -- :: IO (Result, Maybe (Board Word8))
+  let s' = mapStateT (return . runIdentity) s
+  liftIO $ BL.writeFile "out.cnf" $ dimacsSAT s
+  ans <- cryptominisat `solveWith` s'
   showField ans
