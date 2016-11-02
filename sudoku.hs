@@ -58,7 +58,7 @@ problem1 = [ "-9---3---"
 main :: IO ()
 main = do
   forM_ problem1 putStrLn
-  let p = array fieldRange $ zip (range ((1,1),(9,9))) (concat problem1)
+  let p = array fieldRange $ zip (range fieldRange) (concat problem1)
   let s = replicateM 81 exists >>= sudoku p . listArray fieldRange
   let s' = mapStateT (return . runIdentity) s
   liftIO $ BL.writeFile "out.cnf" $ dimacsSAT s
